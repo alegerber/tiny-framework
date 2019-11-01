@@ -1,8 +1,9 @@
 <?php
 
 spl_autoload_register(function ($className) {
-    include preg_replace('\\', '/', substr($className, 1)) . '.php';
+    include __DIR__ . '/' . preg_replace('/\\\\/', '/', $className). '.php';
 });
+
 
 $router = Tiny\Router\Router::getInstance();
 
