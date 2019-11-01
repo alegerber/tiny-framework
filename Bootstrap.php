@@ -7,9 +7,9 @@ spl_autoload_register(function ($className) {
 $router = Tiny\Router\Router::getInstance();
 
 $router->add('/', [
-    'controller' => 'TestController',
-    'action'     => 'testAction',
-    'method'     => 'GET'
+    'controller'  => 'TestController',
+    'method'      => 'testAction',
+    'http_method' => 'GET'
 ]);
 
 $router->callController($_SERVER['REQUEST_URI']);

@@ -2,6 +2,8 @@
 
 namespace Tiny\Router;
 
+use Tiny\Http\Response;
+
 class Router
 {
     /**
@@ -63,42 +65,72 @@ class Router
     public function callController(string $requestUri): void
     {
         if (null !== $params = $this->match($requestUri)) {
-            $controllerName = $params['controller'];
 
-            $controllerClass = sprintf('\\App\\Controller\\%s', $controllerName);
+            $controller = $this->getController(
+                $params['controller'],
+                $params['controller_args'] ?? null
+            );
 
-            if(isset($params['controller_args'])){
-
-                $controllerArgs = [];
-
-                foreach ($params['controller_args'] as $controllerArg) {
-                    $controllerArgs[] = new $controllerArg();
-                }
-
-                $controller = new $controllerClass(...$controllerArgs);
-            } else {
-                $controller = new $controllerClass();
-            }
-
-            $method = $params['action'];
-
-            if(isset($params['action_args'])){
-
-                $actionArgs = [];
-
-                foreach ($params['action_args'] as $actionArg) {
-                    $actionArgs[] = new $actionArg();
-                }
-
-                echo (string) $controller->$method(...$actionArgs);
-            } else {
-                echo (string) $controller->$method();
-            }
+            echo (string) $this->getResponse(
+                $controller,
+                $params['method'],
+                $params['method_args'] ?? null
+            );
 
         } else {
             print_r($requestUri);
             echo 'route not found';
             //throw new RouteException('route not found');
         }
+    }
+
+
+    /**
+     * @param string $controllerName
+     * @param array|null $paramControllerArgs
+     * @return object
+     */
+    private function getController(string $controllerName, ?array $paramControllerArgs): object
+    {
+        $controllerClass = sprintf('\\App\\Controller\\%s', $controllerName);
+
+        if (null !== $paramControllerArgs) {
+
+            return new $controllerClass(...$this->instantiation($paramControllerArgs));
+        }
+
+        return new $controllerClass();
+    }
+
+    /**
+     * @param object $controller
+     * @param string $methodName
+     * @param array|null $paramMethodArgs
+     * @return Response
+     */
+    private function getResponse(object $controller, string $methodName, ?array $paramMethodArgs): Response
+    {
+        if(null !== $paramMethodArgs){
+
+            return $controller->$methodName(...$this->instantiation($paramMethodArgs));
+        }
+
+        return $controller->$methodName();
+    }
+
+
+    /**
+     * @param array $paramArgs
+     * @return array
+     */
+    private function instantiation(array $paramArgs): array
+    {
+        $args = [];
+
+        foreach ($paramArgs as $arg) {
+            $args[] = new $arg();
+        }
+
+        return $args;
     }
 }
