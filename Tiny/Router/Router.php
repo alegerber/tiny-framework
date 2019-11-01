@@ -3,6 +3,7 @@
 namespace Tiny\Router;
 
 use Tiny\Http\Response;
+use Tiny\Router\Exception\InvalidRouteException;
 
 class Router
 {
@@ -78,9 +79,7 @@ class Router
             );
 
         } else {
-            print_r($requestUri);
-            echo 'route not found';
-            //throw new RouteException('route not found');
+            throw new InvalidRouteException($requestUri);
         }
     }
 
