@@ -9,17 +9,17 @@ class Response
     /**
      * @var string $content
      */
-    private string $content;
+    private $content;
 
     /**
      * @var int $status_code
      */
-    private int $status_code;
+    private $status_code;
 
     /**
      * @var string $header
      */
-    private string $header;
+    private $header;
 
     /**
      * Response constructor.

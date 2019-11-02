@@ -5,7 +5,7 @@ spl_autoload_register(function ($className) {
 });
 
 
-$router = Tiny\Router\Router::getInstance();
+$router = \Tiny\Router\Router::getInstance();
 
 $router->add('/', [
     'controller'  => 'TestController',

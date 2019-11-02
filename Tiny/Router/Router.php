@@ -10,7 +10,7 @@ class Router
     /**
      * @var self
      */
-    private static self $instance;
+    private static $instance;
 
     /**
      * gets the instance via lazy initialization (created on first usage)
@@ -27,7 +27,7 @@ class Router
     /**
      * @var array $routes
      */
-    private array $routes = [];
+    private $routes = [];
 
     /**
      * @param $route
